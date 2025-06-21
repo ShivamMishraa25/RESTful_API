@@ -58,5 +58,23 @@ app.put("/users/:id", (req, res) => {
     if(!user) {
         return res.status(404).json({message: `user with the id: ${userId} could not be found.`});
     }
+    
+    const keys = Object.keys(req.body);
+    keys.forEach(key => {
+        user[key] = req.body[key];
+    });
 
+    return res.status(200).json(users);
 });
+
+app.delete("/users/:id", (req, res) => {
+    const userId = req.params.id;
+    const user = users.find(user => user.id == userId);
+
+    if(!user) {
+        return res.status(404).json({message: `user with the id: ${userId} could not be found.`});
+    }
+
+    users = users.filter(userObj => userObj != user);
+    return res.status(200).json(users);
+})
