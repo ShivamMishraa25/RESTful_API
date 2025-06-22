@@ -40,22 +40,24 @@ app.use((req, res, next) => {
         console.log(`method: ${req.method}`);
         console.log(`url: ${req.url}`);
     });
-    next();
+    next(); // go to the next middleware
 });
 
 // global middleware for catching server errors
 app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ error: "Internal server error" });
+    console.error(err.stack); // console error
+    res.status(500).json({ error: "Internal server error" }); // send error status and messsage
 });
 
+// global middleware function for validation of recieved payload
 function validation(req, res, next) {
-    const {id, firstName, lastName, hobby} = req.body;
+    const {id, firstName, lastName, hobby} = req.body; // save data in variables
 
+    // if any of the required data doesn't exist then return with an error message
     if(!id || !firstName || !lastName || !hobby) {
         return res.status(400).json({error: `bad request, please fill out all the required data`});
     }
-    next();
+    next(); // if data is present then proceed to next
 }
 
 
@@ -75,14 +77,14 @@ app.get("/users/:id", (req, res) => {
     return res.status(200).json(user); // send status 200 with users data if found
 });
 
-app.post("/users", (req, res) => {
+app.post("/users", validation, (req, res) => {
     const user = req.body; // get the user from req.body
     users.push(user); // push user inside the users array
 
     return res.status(201).json(users); // send 201 status and users array
 });
 
-app.put("/users/:id", (req, res) => {
+app.put("/users/:id", validation, (req, res) => {
     const userId = req.params.id;
     const user = users.find(user => user.id == userId);
 
