@@ -77,14 +77,14 @@ app.get("/users/:id", (req, res) => {
     return res.status(200).json(user); // send status 200 with users data if found
 });
 
-app.post("/users", validation, (req, res) => {
+app.post("/user", validation, (req, res) => {
     const user = req.body; // get the user from req.body
     users.push(user); // push user inside the users array
 
     return res.status(201).json(users); // send 201 status and users array
 });
 
-app.put("/users/:id", validation, (req, res) => {
+app.put("/user/:id", validation, (req, res) => {
     const userId = req.params.id;
     const user = users.find(user => user.id == userId);
 
@@ -101,7 +101,7 @@ app.put("/users/:id", validation, (req, res) => {
     return res.status(200).json(users); // send 200 status and users data
 });
 
-app.delete("/users/:id", (req, res) => {
+app.delete("/user/:id", (req, res) => {
     const userId = req.params.id;
     const user = users.find(user => user.id == userId);
 
